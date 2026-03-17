@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract TwojToken is ERC20, Ownable {
+    // === Zmień te wartości przed deploymentem ===
+    string private constant TOKEN_NAME = "Nowy";      // nazwa tokena
+    string private constant TOKEN_SYMBOL = "BN";          // symbol (max 11 znaków)
+    uint256 private constant INITIAL_SUPPLY = 1_000_000;   // początkowa podaż (w pełnych tokenach)
+
+    constructor() 
+        ERC20(TOKEN_NAME, TOKEN_SYMBOL)
+        Ownable(msg.sender) 
+    {
+        _mint(msg.sender, INITIAL_SUPPLY * 10 ** decimals());
+    }
+
+    // Opcjonalnie: możliwość mintowania nowych tokenów tylko przez ownera
+    function mint(address to, uint256 amount) external onlyOwner {
+        _mint(to, amount);
+    }
+
+    // Opcjonalnie: spalanie tokenów
+    function burn(uint256 amount) external {
+        _burn(msg.sender, amount);
+    }
+}
